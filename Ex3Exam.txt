@@ -1,0 +1,36 @@
+datat<-read.transactions("C:/Users/user/Desktop/datascience/dataA3.txt",format = 'basket',header = FALSE) 
+
+
+
+datatsize=size(datat) 
+
+quantile(datatsize,probs=c(0.01,0.05,0.10,0.25,0.50,0.75,0.90,0.95,0.99,0.999,0.9999,0.99999,0.999999))
+
+#10 products with the highest demand
+
+datatcount<-itemFrequency(datat,'absolute') 
+datatgoods<-sort(datatcount,decreasing=TRUE)
+datatgoods[1:10]
+
+#association rules
+
+rules=apriori(datat,parameter = list(maxlen=10,supp=0.45,conf=0.93))
+rules.sorted=sort(rules,by='lift')
+summary(rules.sorted)
+
+apriori(data = datat, parameter = list(maxlen = 10, supp = 0.45, conf = 0.93))
+
+#Rules Evaluation
+
+measures=interestMeasure(rules.sorted,measure=c('coverage','fishersExactTest'),tran
+sactions=datat)
+summary(measures)
+
+#Highest Confidence
+
+inspect(head(sort(rules.sorted,by='confidence'),n=10))
+
+#Highest Lift
+
+inspect(head(sort(rules.sorted,by='lift'),n=10))
+
